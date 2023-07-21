@@ -1,0 +1,113 @@
+service: aws-node-project
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  profile: default
+  region: ap-south-1
+  timeout: 29
+
+plugins:
+  - serverless-offline
+  - serverless-dotenv-plugin
+
+useDotenv: true
+
+functions:
+  verify-token:
+    handler: helpers/isAuth.validate
+
+  hello:
+    handler: index.handler
+    events:
+      - http:
+          method: GET
+          path: /hello
+
+  registerUser:
+    handler: functions/User/register-user.registerUser
+    events:
+      - http:
+          method: POST
+          path: /user
+
+  login:
+    handler: functions/User/login.login
+    events:
+      - http:
+          method: POST
+          path: /login
+
+  updateUser:
+    handler: functions/User/update-user.updateUser
+    events:
+      - http:
+          method: PUT
+          path: /user/{id}
+          authorizer: verify-token
+
+  deleteUser:
+    handler: functions/User/delete-user.deleteUser
+    events:
+      - http:
+          method: DELETE
+          path: /user/{id}
+          authorizer: verify-token
+
+  createPost:
+    handler: functions/Post/create-post.createPost
+    events:
+      - http:
+          method: POST
+          path: /post
+          authorizer: verify-token
+
+  getPost:
+    handler: functions/Post/get-post.getPost
+    events:
+      - http:
+          method: GET
+          path: /post/{id}
+          authorizer: verify-token
+
+  getAllPosts:
+    handler: functions/Post/get-post.getAllPosts
+    events:
+      - http:
+          method: GET
+          path: /posts
+          authorizer: verify-token
+        
+  searchPost:
+      handler: functions/Post/search-post.search
+      events:
+        - http:
+            method: GET
+            path: /posts/search
+            authorizer: verify-token
+
+  updatePost:
+    handler: functions/Post/update-post.updatePost
+    events:
+      - http:
+          method: PUT
+          path: /post/{id}
+          authorizer: verify-token
+
+  deletePost:
+    handler: functions/Post/delete-post.deletePost
+    events:
+      - http:
+          method: DELETE
+          path: /post/{id}
+          authorizer: verify-token
+
+  urlGenerator:
+    handler: utils/putUrlGenerator.uploadImage
+    events:
+      - http:
+          method: POST
+          path: /generateUrl
+          authorizer: verify-token
+          

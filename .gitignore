@@ -1,0 +1,12 @@
+# package directories
+node_modules
+jspm_packages
+
+# .env file
+.env
+
+# Serverless directories
+.serverless
+
+private_key.pem
+public_key.pem
